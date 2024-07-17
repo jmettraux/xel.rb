@@ -11,6 +11,8 @@
 .rspec.out
 .ruby-version
 
+Gemfile.lock
+
 .chat.md
 .openai*
 
