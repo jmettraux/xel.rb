@@ -39,18 +39,9 @@ def trunc(s, max)
 end
 
 
-describe 'xel_js' do
+describe Xel do
 
-  before :all do
-
-    @bro =
-      make_browser(%w[
-        spec/www/jaabro-1.4.0.js
-        src/xel.js
-      ])
-  end
-
-  describe 'XelParser' do
+  describe Xel::Parser do
 
     describe '.parse' do
 
@@ -61,8 +52,11 @@ describe 'xel_js' do
 
         it "parses successfully #{JSON.dump(code)}" do
 
-          expect(@bro.eval(%{ XelParser.parse(#{JSON.dump(code)}); })
-            ).to eq(tree)
+          expect(
+            Xel::Parser.parse(code)
+          ).to eq(
+            tree
+          )
         end
       end
 
@@ -70,7 +64,7 @@ describe 'xel_js' do
     end
   end
 
-  describe 'Xel' do
+  describe Xel do
 
     describe '.eval' do
 
@@ -89,10 +83,8 @@ describe 'xel_js' do
 
         it(t) do
 
-          r = @bro.eval(%{
-            Xel.eval(
-              XelParser.parse(#{JSON.dump(code)}),
-              #{JSON.dump(ctx)}); })
+          r = Xel.eval(Xel::Parser.parse(code), ctx)
+
           if out.is_a?(Float)
             expect('%0.2f' % r).to eq('%0.2f' % out)
           elsif out.is_a?(Array)
