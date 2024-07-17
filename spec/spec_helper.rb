@@ -6,7 +6,8 @@
 #
 
 require 'pp'
-require 'ostruct'
+require 'json'
+#require 'ostruct'
 
 require 'xel'
 
