@@ -1,0 +1,16 @@
+
+#
+# .gitignore
+
+.vim*
+
+.todo.md
+
+.bxsinfo.yaml
+.errors
+.rspec.out
+.ruby-version
+
+.chat.md
+.openai*
+
