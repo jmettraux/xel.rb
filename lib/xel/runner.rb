@@ -281,11 +281,56 @@ module Xel
       Math.sqrt(v)
     end
 
-    def do_eval(t, context={})
+#  evals.LAMBDA = function(tree, context) {
+#
+#    let args = tree.slice(1).map(function(t) { return t[1]; });
+#
+#    let code = tree[tree.length - 1];
+#
+#    let l = function() {
+#
+#      let as = Array.from(arguments);
+#
+#      let ctx1 = Object.assign({}, context, as.pop());
+#      for (let i = 0, l = args.length; i < l; i++) { ctx1[args[i]] = as[i]; }
+#
+#      return self.eval(code, ctx1);
+#    };
+#
+#    l._source = tree._source;
+#
+#    return l;
+#  };
+    def eval_LAMBDA(tree, context)
 
-      return t unless t.is_a?(Array) && t.first.class == String
+      args = tree[1..-1].collect { |t| t[1] }
+      code = tree[-1]
 
-      send("eval_#{t[0]}", t, context)
+      l =
+        Proc.new { |*argl|
+          ctx = context.dup.merge(argl.pop)
+          args.each_with_index { |arg, i| ctx[arg] = argl[i] }
+          Xel.do_eval(code, ctx) }
+      class << l
+        def _source; tree._source; end
+      end
+
+      l
+    end
+
+    def do_eval(tree, context={})
+
+      return tree unless tree.is_a?(Array) && tree.first.class == String
+
+      t0 = tree[0]
+
+      if (v = context[t0]) && v.is_a?(Proc)
+        args = tree[1..-1].collect { |t| do_eval(t, context) }
+        args << context
+        v.call(*args)
+      else
+        send("eval_#{t0}", tree, context)
+      end
     end
 
     def eval(s, context={})
@@ -295,23 +340,6 @@ module Xel
 
       do_eval(t, context)
     end
-
-#    def eeval(s, context={})
-#      return s unless s.is_a?(String)
-#      s = s.match(/\A\s*=?\s*(.+)\z/)[1]
-#      eval(s, context)
-#    end
-#
-#    def keval(o, key, ctx)
-#      ukey = "_#{key}"
-#      if t = o[ukey]; return self.do_eval(t, ctx); end
-#      v = o[key]
-#      if v.is_a?(String) && v.strip[0] == '='
-#        o[ukey] = self.parse(v.strip[1..-1].strip)
-#        return self.do_eval(o[ukey], ctx)
-#      end
-#      v
-#    end
   end
 end
 

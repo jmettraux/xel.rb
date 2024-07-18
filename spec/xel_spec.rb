@@ -175,12 +175,12 @@ describe Xel do
 
     context 'lambdas' do
 
-      they 'have a _source'
+      they 'have a _source' do
 
-      #  r = @bro.eval(%{ Xel.eval("LAMBDA(a, b, a + b)", {})._source })
-      #
-      #  expect(r).to eq('LAMBDA(a, b, a + b)')
-      #end
+        r = Xel.eval("LAMBDA(a, b, a + b)", {})._source
+
+        expect(r).to eq('LAMBDA(a, b, a + b)')
+      end
     end
 
     context 'callbacks' do
