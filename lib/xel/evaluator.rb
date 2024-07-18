@@ -298,12 +298,17 @@ module Xel
       (n.to_f / m).round * m rescue nil
     end
 
-    #def eval_MROUND2(tree, context)
-    #  n, m = _eval_args(tree, context, max: 2)
-    #  return Float::NAN if (n * m) < 0
-    #  (n.to_f / m).round * m rescue nil
-    #end
     alias eval_MROUND2 eval_MROUND
+
+    def eval_CEILING(tree, context)
+
+      as = _eval_args(tree, context, max: 2)
+      as << 1 if as.length < 2
+      n, m = as
+      r = n % m
+
+      r == 0 ? n : n - r + m
+    end
 
     def p2(n); n * n; end
 
