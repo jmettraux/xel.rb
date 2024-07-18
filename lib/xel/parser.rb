@@ -76,8 +76,13 @@ module Xel::Parser include Raabro
 
   def rewrite_fun(tree)
 
-    [ tree.children[0].string ] +
-    tree.children[1].children.select(&:name).collect { |c| rewrite(c) }
+    t =
+      [ tree.children[0].string ] +
+      tree.children[1].children.select(&:name).collect { |c| rewrite(c) }
+    class << t; attr_accessor :_source; end
+    t._source = tree.strinp
+
+    t
   end
 
   def rewrite_exp(tree); rewrite(tree.children[0]); end

@@ -307,13 +307,13 @@ module Xel
       code = tree[-1]
 
       l =
-        Proc.new { |*argl|
+        Proc.new do |*argl|
           ctx = context.dup.merge(argl.pop)
           args.each_with_index { |arg, i| ctx[arg] = argl[i] }
-          Xel.do_eval(code, ctx) }
-      class << l
-        def _source; tree._source; end
-      end
+          Xel.do_eval(code, ctx)
+        end
+      class << l; attr_accessor :_source; end
+      l._source = tree._source
 
       l
     end
