@@ -50,8 +50,10 @@ describe Xel do
         code = k[:c]
         tree = k[:t]; next unless tree
 
-        it "parses successfully #{JSON.dump(code)}" do
+        it "parses successfully #{code.inspect}" do
 
+#Raabro.pp(Xel::Parser.parse(code, debug: 2), colours: true)
+#Raabro.pp(Xel::Parser.parse(code, debug: 3), colours: true)
           expect(
             Xel::Parser.parse(code)
           ).to eq(

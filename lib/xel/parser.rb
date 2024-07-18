@@ -12,7 +12,7 @@ module Xel::Parser include Raabro
   def com(i); rex(nil, i, /,\s*/); end
 
   def number(i)
-    rex(:number, i, /-?([0-9]*\.[0-9]+|[0-9][,0-9]*[0-9]|[0-9]+)\s*/)
+    rex(:number, i, /-?(\.[0-9]+|([0-9][,0-9]*[0-9]|[0-9]+)(\.[0-9]+)?)\s*/)
   end
 
   def var(i); rex(:var, i, /[a-z_][A-Za-z0-9_.]*\s*/); end
@@ -24,12 +24,12 @@ module Xel::Parser include Raabro
   def string(i); alt(:string, i, :dqstring, :qstring); end
 
   def funargs(i); eseq(:funargs, i, :pa, :cmp, :com, :pz); end
-  def funname(i); rex(:funname, i, /[A-Z][A-Z0-9]*/); end
+  def funname(i); rex(:funname, i, /[_a-zA-Z][_a-zA-Z0-9]*/); end
   def fun(i); seq(:fun, i, :funname, :funargs); end
 
   def comparator(i); rex(:comparator, i, /([\<\>]=?|=~|!?=|IN)\s*/); end
   def multiplier(i); rex(:multiplier, i, /[*\/]\s*/); end
-  def adder(i); rex(:adder, i, /[+\-]\s*/); end
+  def adder(i); rex(:adder, i, /[+\-&]\s*/); end
 
   def par(i); seq(:par, i, :pa, :cmp, :pz); end
   def exp(i); alt(:exp, i, :par, :fun, :number, :string, :arr, :var); end
@@ -57,7 +57,8 @@ module Xel::Parser include Raabro
     return rewrite(tree.children.first) if tree.children.size == 1
 
     cn = tree.children.dup
-    a = [ tree.name == :add ? 'SUM' : 'MUL' ]
+    a = [ tree.name == :add ? 'plus' : 'MUL' ]
+    a = [ 'amp' ] if cn[1] && cn[1].strinp == '&'
     mod = nil
 
     while c = cn.shift
