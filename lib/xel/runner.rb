@@ -78,6 +78,19 @@ module Xel
       tree[1..-1].collect { |c| do_eval(c, context) }
     end
 
+    def eval_plus(tree, context)
+
+      args = tree[1..-1].collect { |c| do_eval(c, context) }
+
+      if args[0].is_a?(Numeric)
+        args.inject(&:+)
+      elsif args[0].is_a?(Array)
+        args.inject([]) { |a, arg| a.concat(arg) }
+      else
+        nil
+      end
+    end
+
     def eval_AND(tree, context)
 
 #p[ :AND, tree, tree[1..-1].collect { |c| do_eval(c, context) } ]
@@ -238,14 +251,33 @@ module Xel
       Math.sqrt(a)
     end
 
+    def eval_LET(tree, context)
+
+      ctx = context.dup
+
+      key = nil
+        #
+      tree[1..-2].each_with_index do |t, i|
+        if i % 2 == 0
+          key = (t[0] == 'var') ? t[1] : self.do_eval(t, ctx).to_s
+        else
+          ctx[key] = self.do_eval(t, ctx)
+        end
+      end
+
+      self.do_eval(tree[-1], ctx)
+    end
+
     def p2(n); n * n; end
 
     def eval_STDEV(tree, context)
+
       a = do_eval(tree[1], context)
       s = a.inject(0.0) { |acc, e| acc + e }
       m = s / a.length
       s = a.inject(0.0) { |acc, e| acc + p2(e - m) }
       v = s / (a.length - 1)
+
       Math.sqrt(v)
     end
 
