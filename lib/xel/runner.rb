@@ -281,17 +281,13 @@ module Xel
       do_eval(tree[-1], ctx)
     end
 
-      #evals.ROUND = function(tree, context) {
-      #  let as = evalArgs(tree, context);
-      #  if (as.length < 2) as.push(0);
-      #  let n = as[0], m = as[1];
-      #  let t = 10 ** m;
-      #  return Math.round(n * t) / t;
-      #};
-      #
-    #def eval_ROUND(tree, context)
-    #  eval_args(tree, context)
-    #end
+    def eval_ROUND(tree, context)
+
+      args = _eval_args(tree, context)
+      args << 0 if args.length < 2
+
+      args[0].round(args[1])
+    end
 
     def p2(n); n * n; end
 
