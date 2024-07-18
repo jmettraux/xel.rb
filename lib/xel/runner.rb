@@ -7,6 +7,20 @@ module Xel
 
   class << self
 
+    def _eval_args(tree, context, opts={})
+
+      sta = opts[:start] || 1
+      max = opts[:max] || 99
+
+      a = []
+      tree[sta..-1].each do |t|
+        break if a.length >= max
+        a << do_eval(t, context)
+      end
+
+      a
+    end
+
     def eval_str(tree, context); tree[1]; end
 
     def eval_num(tree, context)
@@ -35,10 +49,10 @@ module Xel
     end
 
     def eval_inv(tree, context)
-      1.0 / self.do_eval(tree[1], context)
+      1.0 / do_eval(tree[1], context)
     end
     def eval_opp(tree, context)
-      - self.do_eval(tree[1], context)
+      - do_eval(tree[1], context)
     end
 
     def eval_bool(tree, context); tree[0].downcase == 'true'; end
@@ -53,7 +67,7 @@ module Xel
 
     def eval_cmp(tree, context)
 
-      args = tree[2..-1].collect { |c| self.do_eval(c, context) }
+      args = _eval_args(tree, context, start: 2)
 
       case tree[1]
       when '=', '!=' then do_eval_equal(tree[1], args[0], args[1])
@@ -73,14 +87,11 @@ module Xel
     def eval_TRUE(tree, context); tree[0] == 'TRUE'; end
     alias eval_FALSE eval_TRUE
 
-    def eval_arr(tree, context)
-
-      tree[1..-1].collect { |c| do_eval(c, context) }
-    end
+    alias eval_arr _eval_args
 
     def eval_plus(tree, context)
 
-      args = tree[1..-1].collect { |c| do_eval(c, context) }
+      args = _eval_args(tree, context)
 
       if args[0].is_a?(Numeric)
         args.inject(&:+)
@@ -135,7 +146,7 @@ module Xel
 
     def eval_MUL(tree, context)
 
-      args = tree[1..-1].collect { |c| do_eval(c, context) }
+      args = _eval_args(tree, context)
 
       if args.find { |a| ! (a.is_a?(Integer) || a.is_a?(Float)) }
         fail ArgumentError.new("cannot multiply #{args.inspect}")
@@ -146,7 +157,7 @@ module Xel
 
     def eval_SUM(tree, context)
 
-      args = tree[1..-1].collect { |c| do_eval(c, context) }
+      args = _eval_args(tree, context)
 
       if args.find { |a|
         ! (a.is_a?(Integer) || a.is_a?(Float) || a.is_a?(Array)) }
@@ -159,23 +170,23 @@ module Xel
 
     def eval_MIN(tree, context)
 
-      as = tree[1..-1].collect { |c| do_eval(c, context) }
+      args = _eval_args(tree, context)
 
-      if as.find { |a| ! (a.is_a?(Integer) || a.is_a?(Float)) }
-        as.first
+      if args.find { |a| ! (a.is_a?(Integer) || a.is_a?(Float)) }
+        args.first
       else
-        as.min
+        args.min
       end
     end
 
     def eval_MAX(tree, context)
 
-      as = tree[1..-1].collect { |c| do_eval(c, context) }
+      args = _eval_args(tree, context)
 
-      if as.find { |a| ! (a.is_a?(Integer) || a.is_a?(Float)) }
-        as.first
+      if args.find { |a| ! (a.is_a?(Integer) || a.is_a?(Float)) }
+        args.first
       else
-        as.max
+        args.max
       end
     end
 
@@ -259,14 +270,26 @@ module Xel
         #
       tree[1..-2].each_with_index do |t, i|
         if i % 2 == 0
-          key = (t[0] == 'var') ? t[1] : self.do_eval(t, ctx).to_s
+          key = (t[0] == 'var') ? t[1] : do_eval(t, ctx).to_s
         else
-          ctx[key] = self.do_eval(t, ctx)
+          ctx[key] = do_eval(t, ctx)
         end
       end
 
-      self.do_eval(tree[-1], ctx)
+      do_eval(tree[-1], ctx)
     end
+
+      #evals.ROUND = function(tree, context) {
+      #  let as = evalArgs(tree, context);
+      #  if (as.length < 2) as.push(0);
+      #  let n = as[0], m = as[1];
+      #  let t = 10 ** m;
+      #  return Math.round(n * t) / t;
+      #};
+      #
+    #def eval_ROUND(tree, context)
+    #  eval_args(tree, context)
+    #end
 
     def p2(n); n * n; end
 
@@ -281,26 +304,6 @@ module Xel
       Math.sqrt(v)
     end
 
-#  evals.LAMBDA = function(tree, context) {
-#
-#    let args = tree.slice(1).map(function(t) { return t[1]; });
-#
-#    let code = tree[tree.length - 1];
-#
-#    let l = function() {
-#
-#      let as = Array.from(arguments);
-#
-#      let ctx1 = Object.assign({}, context, as.pop());
-#      for (let i = 0, l = args.length; i < l; i++) { ctx1[args[i]] = as[i]; }
-#
-#      return self.eval(code, ctx1);
-#    };
-#
-#    l._source = tree._source;
-#
-#    return l;
-#  };
     def eval_LAMBDA(tree, context)
 
       args = tree[1..-1].collect { |t| t[1] }
@@ -325,7 +328,7 @@ module Xel
       t0 = tree[0]
 
       if (v = context[t0]) && v.is_a?(Proc)
-        args = tree[1..-1].collect { |t| do_eval(t, context) }
+        args = _eval_args(tree, context)
         args << context
         v.call(*args)
       else
