@@ -293,21 +293,17 @@ module Xel
 
       n, m = _eval_args(tree, context, max: 2)
 
-      return nil if (n * m) < 0
+      return Float::NAN if (n * m) < 0
 
       (n.to_f / m).round * m rescue nil
     end
 
-# //  evals.MROUND2 = function(tree, context) {
-# //
-# //    let [ n, m ] = evalArgs(tree, context, 2);
-# //
-# //    if (n * m < 0) return NaN;
-# //
-# //    let r = Math.round(n / m) * m * 100;
-# //
-# //    return (r - r % 1) / 100;
-# //  };
+    #def eval_MROUND2(tree, context)
+    #  n, m = _eval_args(tree, context, max: 2)
+    #  return Float::NAN if (n * m) < 0
+    #  (n.to_f / m).round * m rescue nil
+    #end
+    alias eval_MROUND2 eval_MROUND
 
     def p2(n); n * n; end
 

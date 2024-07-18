@@ -8,7 +8,10 @@
 require 'spec/spec_helper'
 
 
-def _eval(s); JSON.parse(JSON.dump(eval(s))); end
+def _eval(s)
+  return Float::NAN if s == 'NaN'
+  JSON.parse(JSON.dump(eval(s)))
+end
 
 XEL_CASES =
   eval(File.read('spec/_xel.rb')) +
@@ -100,7 +103,11 @@ describe Xel do
         #else
         #  expect(r).to eq(out)
         #end
-        expect(r).to eq(out)
+        if out.is_a?(Float) && out.nan?
+          expect(r.nan?).to eq(true)
+        else
+          expect(r).to eq(out)
+        end
       end
     end
 
