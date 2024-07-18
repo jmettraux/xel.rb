@@ -283,11 +283,31 @@ module Xel
 
     def eval_ROUND(tree, context)
 
-      args = _eval_args(tree, context)
+      args = _eval_args(tree, context, max: 2)
       args << 0 if args.length < 2
 
       args[0].round(args[1])
     end
+
+    def eval_MROUND(tree, context)
+
+      n, m = _eval_args(tree, context, max: 2)
+
+      return nil if (n * m) < 0
+
+      (n.to_f / m).round * m rescue nil
+    end
+
+# //  evals.MROUND2 = function(tree, context) {
+# //
+# //    let [ n, m ] = evalArgs(tree, context, 2);
+# //
+# //    if (n * m < 0) return NaN;
+# //
+# //    let r = Math.round(n / m) * m * 100;
+# //
+# //    return (r - r % 1) / 100;
+# //  };
 
     def p2(n); n * n; end
 
