@@ -7,6 +7,8 @@ module Xel
 
   class << self
 
+    protected
+
     def _eval_args(tree, context, opts={})
 
       sta = opts[:start] || 1
@@ -335,6 +337,8 @@ module Xel
         send("eval_#{t0}", tree, context)
       end
     end
+
+    public
 
     def eval(s, context={})
 
