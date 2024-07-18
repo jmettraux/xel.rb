@@ -258,37 +258,28 @@ module Xel
 
     def eval(s, context={})
 
-      t = Xel::Parser.parse(s)
+      t = s.is_a?(Array) ? s : Xel::Parser.parse(s)
       fail ArgumentError.new("syntax error in >>#{s}<<") unless t
 
       do_eval(t, context)
     end
 
-    def eeval(s, context={})
-
-      return s unless s.is_a?(String)
-
-      s = s.match(/\A\s*=?\s*(.+)\z/)[1]
-
-      eval(s, context)
-    end
-
-    def keval(o, key, ctx)
-
-      ukey = "_#{key}"
-
-      if t = o[ukey]; return self.do_eval(t, ctx); end
-
-      v = o[key]
-
-      if v.is_a?(String) && v.strip[0] == '='
-
-        o[ukey] = self.parse(v.strip[1..-1].strip)
-        return self.do_eval(o[ukey], ctx)
-      end
-
-      v
-    end
+#    def eeval(s, context={})
+#      return s unless s.is_a?(String)
+#      s = s.match(/\A\s*=?\s*(.+)\z/)[1]
+#      eval(s, context)
+#    end
+#
+#    def keval(o, key, ctx)
+#      ukey = "_#{key}"
+#      if t = o[ukey]; return self.do_eval(t, ctx); end
+#      v = o[key]
+#      if v.is_a?(String) && v.strip[0] == '='
+#        o[ukey] = self.parse(v.strip[1..-1].strip)
+#        return self.do_eval(o[ukey], ctx)
+#      end
+#      v
+#    end
   end
 end
 
