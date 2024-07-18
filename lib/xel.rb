@@ -9,7 +9,7 @@ end
 require 'raabro'
 
 require 'xel/parser'
-require 'xel/runner'
+require 'xel/evaluator'
 
 
 module Xel
