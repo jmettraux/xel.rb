@@ -151,6 +151,16 @@ module Xel
     end
     alias eval_SWITCH eval_CASE
 
+    def eval_UNIQUE(tree, context)
+
+      arr = do_eval(tree[1], context)
+
+      fail ArgumentError.new("UNIQUE() expects array not #{arr.class}") \
+        unless arr.is_a?(Array)
+
+      arr.uniq
+    end
+
     # SORT({ 1, 3, 2 })         --> [ 1, 2, 3 ]
     # SORT({ 1, 3, 2 }, 1, -1)  --> [ 3, 2, 1 ]
     #
