@@ -310,6 +310,15 @@ module Xel
       r == 0 ? n : n - r + m
     end
 
+    def eval_FLOOR(tree, context)
+
+      as = _eval_args(tree, context, max: 2)
+      as << 1 if as.length < 2
+      n, m = as
+
+      n - (n % m)
+    end
+
     def p2(n); n * n; end
 
     def eval_STDEV(tree, context)
