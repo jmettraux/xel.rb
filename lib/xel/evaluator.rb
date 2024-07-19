@@ -95,10 +95,12 @@ module Xel
 
       args = _eval_args(tree, context)
 
-      if args[0].is_a?(Numeric)
-        args.inject(&:+)
-      elsif args[0].is_a?(Array)
+      if args[0].is_a?(Array)
         args.inject([]) { |a, arg| a.concat(arg) }
+      elsif args.find { |a| ! a.is_a?(Numeric) }
+        args.map(&:to_s).join
+      elsif args.all? { |a| a.is_a?(Numeric) }
+        args.inject(&:+)
       else
         nil
       end
@@ -106,13 +108,11 @@ module Xel
 
     def eval_AND(tree, context)
 
-#p[ :AND, tree, tree[1..-1].collect { |c| do_eval(c, context) } ]
       ! tree[1..-1].find { |c| do_eval(c, context) != true }
     end
 
     def eval_OR(tree, context)
 
-#p[ :OR, tree, tree[1..-1].collect { |c| do_eval(c, context) } ]
       !! tree[1..-1].find { |c| do_eval(c, context) == true }
     end
 
