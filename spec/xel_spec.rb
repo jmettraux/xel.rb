@@ -88,23 +88,15 @@ describe Xel do
 
         r = Xel.eval(Xel::Parser.parse(code), ctx)
 
-        #if out.is_a?(Float)
-        #  expect('%0.2f' % r).to eq('%0.2f' % out)
-        #elsif out.is_a?(Array)
-        #  expect(r.size).to eq(out.size)
-        #  out.zip(r).each do |rese, re|
-        #    #expect(re.class).to eq(rese.class)
-        #    if rese.is_a?(Float)
-        #      expect('%0.2f' % re).to eq('%0.2f' % rese)
-        #    else
-        #      expect(re).to eq(rese)
-        #    end
-        #  end
-        #else
-        #  expect(r).to eq(out)
-        #end
+        floatify = lambda { |a|
+          a.collect { |e| e.is_a?(Float) ? ('%0.2f' % e) : e } }
+
         if out.is_a?(Float) && out.nan?
           expect(r.nan?).to eq(true)
+        elsif out.is_a?(Float)
+          expect('%0.2f' % r).to eq('%0.2f' % out)
+        elsif out.is_a?(Array)
+          expect(floatify[r]).to eq(floatify[out])
         else
           expect(r).to eq(out)
         end

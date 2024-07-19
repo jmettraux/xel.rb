@@ -106,6 +106,11 @@ module Xel
       end
     end
 
+    def eval_amp(tree, context)
+
+      _eval_args(tree, context, start: 1).collect(&:to_s).join
+    end
+
     def eval_AND(tree, context)
 
       ! tree[1..-1].find { |c| do_eval(c, context) != true }
