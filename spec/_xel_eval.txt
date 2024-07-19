@@ -215,7 +215,7 @@ LOWER("ALPHA BRAVO Charly") ⟶   "alpha bravo charly"
 
 a != "" ⟶   { a: "abc"} ⟶   true
 
-LAMBDA(a, b, a + b) ⟶   {}
+LAMBDA(a, b, a + b) ⟶   lambda
 
 KALL(LAMBDA(a, b, a + b), 7, -3) ⟶   4
 KALL(LAMBDA(a, b, a + b), 7, -2, 1) ⟶   5

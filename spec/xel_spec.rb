@@ -10,6 +10,7 @@ require 'spec/spec_helper'
 
 def _eval(s)
   return Float::NAN if s == 'NaN'
+  return (lambda() {}) if s == 'lambda'
   JSON.parse(JSON.dump(eval(s)))
 end
 
@@ -39,6 +40,10 @@ XEL_CASES =
 def trunc(s, max)
   s = s.gsub(/\s*\n\s*/, '↩  ')
   s[0..max] + (s.length > max ? '…' : '')
+end
+def trunc_out(out, max)
+  return '(a lambda)' if out.is_a?(Proc)
+  trunc(out.inspect, max)
 end
 
 
@@ -81,7 +86,7 @@ describe Xel do
       l =
         ctx.any? ? 29 : 56
       t =
-        "evals #{trunc(code, l)} to #{trunc(out.inspect, l)}" +
+        "evals #{trunc(code, l)} to #{trunc_out(out, l)}" +
         (ctx.any? ? ' when ' + trunc(ctx.inspect, l) : '')
 
       it(t) do
@@ -97,7 +102,10 @@ describe Xel do
               e
             end } }
 
-        if out.is_a?(Float) && out.nan?
+        if out.is_a?(Proc)
+          expect(r).to be_a(Proc)
+          expect(r._source).to match(/^LAMBDA\(/)
+        elsif out.is_a?(Float) && out.nan?
           expect(r.nan?).to eq(true)
         elsif out.is_a?(Float)
           expect('%0.2f' % r).to eq('%0.2f' % out)
