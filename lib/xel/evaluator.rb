@@ -126,6 +126,16 @@ module Xel
       ! do_eval(tree[1], context)
     end
 
+    def eval_ORV(tree, context)
+
+      tree[1..-1].each do |t|
+        v = do_eval(t, context)
+        return v if v != '' && v!= nil
+      end
+
+      nil
+    end
+
     def eval_IF(tree, context)
 
       return do_eval(tree[2], context) if do_eval(tree[1], context)
