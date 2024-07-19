@@ -89,7 +89,13 @@ describe Xel do
         r = Xel.eval(Xel::Parser.parse(code), ctx)
 
         floatify = lambda { |a|
-          a.collect { |e| e.is_a?(Float) ? ('%0.2f' % e) : e } }
+          a.collect { |e|
+            if e.is_a?(Float)
+              r = '%0.2f' % e
+              r.match?(/\.00$/) ? r.to_i : r
+            else
+              e
+            end } }
 
         if out.is_a?(Float) && out.nan?
           expect(r.nan?).to eq(true)
