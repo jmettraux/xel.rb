@@ -464,6 +464,13 @@ module Xel
       txs.join(del)
     end
 
+    def eval_D(tree, context)
+
+      _eval_args(tree, context)
+        .each_slice(2)
+        .inject({}) { |h, (k, v)| h[k] = v; h }
+    end
+
     def do_eval(tree, context={})
 
       return tree unless tree.is_a?(Array) && tree.first.class == String
