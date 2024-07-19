@@ -155,14 +155,15 @@ describe Xel do
 
       it 'looks up and finds, or not' do
 
-        r = Xel.eval(
-          `{ VLOOKUP('finds - income', table0, 2),
+        r = Xel.eval(%{
+           { VLOOKUP('finds - income', table0, 2),
              VLOOKUP('mac g - income', table0, 2),
              VLOOKUP('fubar', table0, 2),
-             VLOOKUP('finds - nada hello', table0, 2) }`,
+             VLOOKUP('finds - nada hello', table0, 2) }
+               }.strip,
           @ctx)
 
-        expect(r).to eq([ 1.2, 1.3, 1.1 ])
+        expect(r).to eq([ 1.2, 1.3, nil, 1.1 ])
       end
 
       it 'looks up and finds not' do
@@ -180,9 +181,7 @@ describe Xel do
           Xel.eval(
             "VLOOKUP('fubar', table0, 'abc')",
             @ctx)
-        }.to raise_error(
-          /VLOOKUP.. arg 3 'str,abc' is not a number/
-        )
+        }.to raise_error(ArgumentError, / is not an integer/)
       end
     end
 

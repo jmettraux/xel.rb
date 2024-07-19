@@ -393,6 +393,30 @@ module Xel
       Math.sqrt(v)
     end
 
+    def eval_VLOOKUP(tree, context)
+
+      k, t, i = _eval_args(tree, context, max: 3)
+
+      fail ArgumentError.new(
+        "VLOOKUP() arg 3 #{tree[3].inspect} is not an integer"
+      ) unless i.is_a?(Integer)
+
+      fail ArgumentError.new(
+        "VLOOKUP() arg 2 #{tree[2].inspect} doesn't point to an array of arrays"
+      ) unless t.is_a?(Array)
+
+      t.each_with_index do |r, j|
+
+        fail ArgumentError.new(
+          "VLOOKUP() arg2 row #{j + 1} of table is not an array"
+        ) unless r.is_a?(Array)
+
+        return r[i - 1] if r[0] == k
+      end
+
+      nil
+    end
+
     def eval_LAMBDA(tree, context)
 
       args = tree[1..-1].collect { |t| t[1] }
