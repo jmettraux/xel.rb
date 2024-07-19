@@ -175,6 +175,17 @@ module Xel
       args.reduce(&:+)
     end
 
+    def eval_PRODUCT(tree, context)
+
+      f = lambda { |r, e|
+        case e
+        when Numeric then r * e
+        when Array then e.inject(r, &f)
+        else r; end }
+
+      _eval_args(tree, context).inject(1, &f)
+    end
+
     def eval_MIN(tree, context)
 
       args = _eval_args(tree, context)
