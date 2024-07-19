@@ -417,6 +417,24 @@ module Xel
       arr.collect { |e| fun.call(e, context) }
     end
 
+    def eval_REDUCE(tree, context)
+
+      ts = tree[1..-1]
+      fun = do_eval(ts.pop, context)
+      v0 = do_eval(ts[0], context)
+
+      acc, arr = nil
+        if ts.length == 1
+          arr = v0
+          acc = arr.shift
+        else
+          acc = v0
+          arr = do_eval(ts[1], context)
+        end
+
+      arr.inject(acc) { |r, e| fun.call(r, e, context) }
+    end
+
     def do_eval(tree, context={})
 
       return tree unless tree.is_a?(Array) && tree.first.class == String
