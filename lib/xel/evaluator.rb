@@ -410,6 +410,13 @@ module Xel
       fun.call(*args)
     end
 
+    def eval_MAP(tree, context)
+
+      arr, fun = _eval_args(tree, context, max: 2)
+
+      arr.collect { |e| fun.call(e, context) }
+    end
+
     def do_eval(tree, context={})
 
       return tree unless tree.is_a?(Array) && tree.first.class == String
