@@ -40,6 +40,9 @@ module Xel::Parser include Raabro
   def rcmp(i); seq(:rcmp, i, :comparator, :add); end
   def cmp(i); seq(:cmp, i, :add, :rcmp, '?'); end
 
+  def prequal(i); rex(nil, i, /\s*=?\s*/); end
+  def root(i); seq(nil, i, :prequal, :cmp); end
+
   # rewrite
 
   def rewrite_cmp(tree)
