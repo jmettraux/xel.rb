@@ -119,19 +119,16 @@ describe Xel do
 
     context 'custom functions' do
 
-      they 'work'
+      they 'work' do
 
-      #  r = @bro.eval(%{
-      #    Xel.eval(
-      #      'Plus(1, 1)',
-      #      ctx = { a: 0, _custom_functions: {
-      #        Plus: function(tree, context) {
-      #          return [ tree[0], Object.keys(context) ];
-      #        }
-      #      } }); })
-      #
-      #  expect(r).to eq([ 'Plus', %w[ a _custom_functions _eval ] ])
-      #end
+        r = Xel.eval(
+          'Plus(1, 1)',
+          { a: 0,
+            _custom_functions: {
+              Plus: lambda { |tree, context| [ tree[0], context.keys ] } } })
+
+        expect(r).to eq([ 'Plus', %i[ a _custom_functions ] ])
+      end
     end
 
     context 'VLOOKUP()' do
