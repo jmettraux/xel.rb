@@ -151,6 +151,24 @@ module Xel
     end
     alias eval_SWITCH eval_CASE
 
+    # SORT({ 1, 3, 2 })         --> [ 1, 2, 3 ]
+    # SORT({ 1, 3, 2 }, 1, -1)  --> [ 3, 2, 1 ]
+    #
+    def eval_SORT(tree, context)
+
+      #arr, col, dir = _eval_args(tree, context, max: 3)
+      arr, _, dir = _eval_args(tree, context, max: 3)
+
+      fail ArgumentError.new("SORT() expects array not #{arr.class}") \
+        unless arr.is_a?(Array)
+
+      r =
+        arr.all? { |e| e.is_a?(Numeric) } ? arr.sort :
+        arr.sort_by(&:to_s)
+
+      dir == -1 ? r.reverse : r
+    end
+
     def eval_MUL(tree, context)
 
       args = _eval_args(tree, context)
