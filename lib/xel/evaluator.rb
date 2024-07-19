@@ -400,6 +400,16 @@ module Xel
       l
     end
 
+    def eval_KALL(tree, context)
+
+      args = _eval_args(tree, context)
+      args << context
+
+      fun = args.shift
+
+      fun.call(*args)
+    end
+
     def do_eval(tree, context={})
 
       return tree unless tree.is_a?(Array) && tree.first.class == String
