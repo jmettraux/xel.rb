@@ -319,6 +319,15 @@ module Xel
       n - (n % m)
     end
 
+    def eval_TRUNC(tree, context)
+
+      as = _eval_args(tree, context, max: 2)
+      as << 0 if as.length < 2
+      n = as[0]; m = 10 ** as[1]
+
+      (n * m).floor.to_f / m
+    end
+
     def p2(n); n * n; end
 
     def eval_STDEV(tree, context)
