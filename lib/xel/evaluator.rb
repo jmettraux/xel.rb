@@ -445,6 +445,25 @@ module Xel
       arr.inject(acc) { |r, e| fun.call(r, e, context) }
     end
 
+    def eval_TEXTJOIN(tree, context)
+
+      agg = lambda { |acc, x|
+        case x
+        when String then acc << x.strip
+        when Array then x.each { |e| agg.call(acc, e) }
+        when nil then acc << ''
+        else acc << x.inspect; end
+        acc }
+
+      del, ign = _eval_args(tree, context, max: 2)
+
+      txs = tree[3..-1].inject([]) { |r, t| agg.call(r, do_eval(t, context)) }
+
+      txs = txs.select { |t| t.length > 0 } if ign
+
+      txs.join(del)
+    end
+
     def do_eval(tree, context={})
 
       return tree unless tree.is_a?(Array) && tree.first.class == String
