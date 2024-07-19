@@ -182,15 +182,13 @@ module Xel
 
     def eval_SUM(tree, context)
 
-      args = _eval_args(tree, context)
+      f = lambda { |r, e|
+        case e
+        when Numeric then r + e
+        when Array then e.inject(r, &f)
+        else r; end }
 
-      if args.find { |a|
-        ! (a.is_a?(Integer) || a.is_a?(Float) || a.is_a?(Array)) }
-      then
-        args = args.map(&:to_s)
-      end
-
-      args.reduce(&:+)
+      _eval_args(tree, context).inject(0, &f);
     end
 
     def eval_PRODUCT(tree, context)
