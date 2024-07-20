@@ -108,5 +108,13 @@ module Xel::Parser include Raabro
 
     [ 'str', q == '"' ? s.gsub("\\\"", '"') : s.gsub("\\'", "'") ]
   end
+
+  def sash(s)
+
+    l = s.length
+    h = s.hash.to_s(16)
+
+    "#{s[0, 7]}|#{s[l / 2, 1]}|#{s[[ l - 7, 0 ].max..-1]}|#{l}|#{h}"
+  end
 end
 
