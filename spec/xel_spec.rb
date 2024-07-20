@@ -123,11 +123,9 @@ describe Xel do
 
         r = Xel.eval(
           'Plus(1, 1)',
-          { a: 0,
-            _custom_functions: {
-              Plus: lambda { |tree, context| [ tree[0], context.keys ] } } })
+          { a: 0, Plus: lambda { |tree, context| [ tree[0], context.keys ] } })
 
-        expect(r).to eq([ 'Plus', %i[ a _custom_functions ] ])
+        expect(r).to eq([ 'Plus', %i[ a Plus ] ])
       end
     end
 

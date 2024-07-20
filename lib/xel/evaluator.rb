@@ -428,7 +428,7 @@ module Xel
           args.each_with_index { |arg, i| ctx[arg] = argl[i] }
           Xel.do_eval(code, ctx)
         end
-      class << l; attr_accessor :_source; end
+      class << l; attr_accessor :_source; def _lambda; true; end; end
       l._source = tree._source
 
       l
@@ -501,10 +501,13 @@ module Xel
 
       t0 = tree[0]
 
-      if (v = context[t0]) && v.is_a?(Proc)
-        args = _eval_args(tree, context)
-        args << context
-        return v.call(*args)
+      if (v = context[t0] || context[t0.to_sym]) && v.is_a?(Proc)
+        if v.respond_to?(:_lambda)
+          args = _eval_args(tree, context)
+          args << context
+          return v.call(*args)
+        end
+        return v.call(tree, context)
       end
 
       cfs = context['_custom_functions'] || context[:_custom_functions]
