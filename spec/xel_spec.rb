@@ -192,61 +192,53 @@ describe Xel do
 
     context 'callbacks' do
 
-      they 'are called twice per each `eval` step'
+      before(:each) { Xel.callbacks.clear }
+      after(:each) { Xel.callbacks.clear }
 
-      #  r = @bro.eval(%{
-      #    (function() {
-      #      var a = [];
-      #      Xel.callbacks.push(function(tree, context, ret) {
-      #        a.push([ tree, context, ret ]);
-      #      });
-      #      Xel.eval("12 + a", { a: 34 });
-      #      Xel.callbacks.pop();
-      #      return a;
-      #    }()); })
-      #
-      #  expect(
-      #    r
-      #  ).to eq([
-      #    [["plus", ["num", "12"], ["var", "a"]], {"a"=>34}],
-      #    [["num", "12"], {"a"=>34}],
-      #    [["num", "12"], {"a"=>34}, 12],
-      #    [["var", "a"], {"a"=>34}],
-      #    [["var", "a"], {"a"=>34}, 34],
-      #    [["plus", ["num", "12"], ["var", "a"]], {"a"=>34}, 46]
-      #  ])
-      #end
+      they 'are called twice per each `eval` step' do
+
+        r = []
+
+        Xel.callbacks <<
+          lambda { |tree, context, ret=nil| r << [ tree, context, ret ] }
+
+        Xel.eval('12 + a', { a: 34 })
+
+        expect(
+          r
+        ).to eq([
+          [["plus", ["num", "12"], ["var", "a"]], {a: 34}, nil],
+          [["num", "12"], {a: 34}, nil],
+          [["num", "12"], {a: 34}, 12],
+          [["var", "a"], {a: 34}, nil],
+          [["var", "a"], {a: 34}, 34],
+          [["plus", ["num", "12"], ["var", "a"]], {a: 34}, 46]
+        ])
+      end
     end
 
     context 'ctx._callbacks' do
 
-      they 'are called twice per each `eval` step'
+      before(:each) { Xel.callbacks.clear }
+      after(:each) { Xel.callbacks.clear }
 
-      #  r = @bro.eval(%{
-      #    (function() {
-      #      var a =
-      #        [];
-      #      var cb =
-      #        function(tree, context, ret) {
-      #          a.push([ tree, ret ]);
-      #        };
-      #      var ctx =
-      #        { a: 35, _callbacks: [ cb ] };
-      #      Xel.eval("12 + a", ctx);
-      #      return a;
-      #    }()); })
-      #
-      #  expect(
-      #    r
-      #  ).to eq([
-      #    [["plus", ["num", "12"], ["var", "a"]]],
-      #    [["num", "12"]],
-      #    [["num", "12"], 12],
-      #    [["var", "a"]],
-      #    [["var", "a"], 35],
-      #    [["plus", ["num", "12"], ["var", "a"]], 47]
-      #  ])
-      #end
+      they 'are called twice per each `eval` step' do
+
+        r = []
+        cb = lambda { |tree, _, ret=nil| r << [ tree, ret ] }
+        Xel.eval('12 + a', { a: 35, _callbacks: [ cb ] })
+
+        expect(
+          r
+        ).to eq([
+          [["plus", ["num", "12"], ["var", "a"]], nil],
+          [["num", "12"], nil],
+          [["num", "12"], 12],
+          [["var", "a"], nil],
+          [["var", "a"], 35],
+          [["plus", ["num", "12"], ["var", "a"]], 47]
+        ])
+      end
     end
   end
 end
