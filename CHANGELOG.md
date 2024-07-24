@@ -4,6 +4,7 @@
 
 ## xel.rb 1.6.0  not yet released
 
+* cache parsed trees
 * stop using `_custom_functions` sub-context, go direct
 
 

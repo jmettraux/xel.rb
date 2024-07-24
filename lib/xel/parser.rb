@@ -108,5 +108,24 @@ module Xel::Parser include Raabro
 
     [ 'str', q == '"' ? s.gsub("\\\"", '"') : s.gsub("\\'", "'") ]
   end
+
+  class << self
+
+    #attr_reader :tree_cache
+
+    def clear_tree_cache
+
+      @tree_cache = {}
+
+      nil
+    end
+
+    alias old_parse parse
+
+    def parse(s, opts={})
+
+      (@tree_cache ||= {})[s.hash] ||= old_parse(s, opts)
+    end
+  end
 end
 
