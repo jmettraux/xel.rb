@@ -20,11 +20,6 @@ module Xel
 
       Xel::Parser.parse(s)
     end
-
-    def sash(s)
-
-      Xel::Parser.sash(s)
-    end
   end
 end
 

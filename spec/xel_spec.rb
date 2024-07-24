@@ -249,31 +249,5 @@ describe Xel do
       #end
     end
   end
-
-  describe '.sash' do
-
-    { '' =>
-        '|||0|1642213314733226589',
-      'foo' =>
-        'foo|o|foo|3|-2982753958713842788',
-      'bar' =>
-        'bar|a|bar|3|-416627592382620520',
-      'The quick brown fox jumps over the lazy dog.' =>
-        'The qui|m|zy dog.|44|677614605558255022',
-      'Lorem ipsum dolor sit amet, consectetur adip' =>
-        'Lorem i|a|ur adip|44|-4003061580189475857',
-    }.each do |k, v|
-
-      it "returns #{v} for '#{k}'" do
-
-        v1 = v.split('|').take(4).join('|')
-
-        h = Xel::Parser.sash(k)
-        h1 = h.split('|').take(4).join('|')
-
-        expect(h1).to eq(v1)
-      end
-    end
-  end
 end
 
