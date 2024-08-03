@@ -515,12 +515,10 @@ module Xel
         return v.call(tree, context)
       end
 
-# FIXME
-      cfs = context['_custom_functions'] || context[:_custom_functions]
-
-      if (v = cfs && (cfs[t0] || cfs[t0.to_sym])) && v.is_a?(Proc)
-        return v.call(tree, context)
-      end
+      #cfs = context['_custom_functions'] || context[:_custom_functions]
+      #if (v = cfs && (cfs[t0] || cfs[t0.to_sym])) && v.is_a?(Proc)
+      #  return v.call(tree, context)
+      #end
 
       ret = send("eval_#{t0}", tree, context)
 
