@@ -68,7 +68,10 @@ describe Xel::Parser do
       end
     end
 
-    it 'returns null when it cannot parse'
+    it 'returns nil when it cannot parse' do
+
+      expect(Xel::Parser.parse('(')).to eq(nil)
+    end
   end
 end
 
