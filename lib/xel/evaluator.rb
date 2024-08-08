@@ -490,7 +490,10 @@ module Xel
 
     def eval_D(tree, context)
 
-      _eval_args(tree, context)
+      as = _eval_args(tree, context)
+      as = as[0] if as.length == 1 && as[0].is_a?(Array)
+
+      as
         .each_slice(2)
         .inject({}) { |h, (k, v)| h[k] = v; h }
     end

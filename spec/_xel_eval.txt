@@ -246,6 +246,8 @@ D('alpha', 'bravo') ⟶   \
   { alpha: 'bravo' }
 D('a', 1, 'b', 'deux', 'charly', { 1, 'deux' }) ⟶   \
   { a: 1, b: 'deux', charly: [ 1, 'deux' ] }
+D({ 'alpha', 'bravo', 'charly', { 'd', 'ee' } }) ⟶   \
+  { alpha: 'bravo', charly: [ 'd', 'ee' ] }
 
 	= CASE(a<5000000, 0.6, a<10000000, 0.55, 0.45) ⟶   { a: 10000 } ⟶    0.6
 = CASE(a<5000000, 0.6, a<10000000, 0.55, 0.45) ⟶   { a: 10000 } ⟶    0.6
