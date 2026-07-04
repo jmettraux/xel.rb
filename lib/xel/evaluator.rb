@@ -276,6 +276,16 @@ module Xel
         col[i.to_i - 1]
     end
 
+    # Counts only numeric values
+    # (including dates and times, since they are stored as numbers)
+    #
+    def eval_COUNT(tree, context)
+
+      col = do_eval(tree[1], context)
+
+      col.is_a?(Array) ? col.count { |e| e.is_a?(Numeric) } : 0;
+    end
+
     def eval_COUNTA(tree, context)
 
       col = do_eval(tree[1], context)
