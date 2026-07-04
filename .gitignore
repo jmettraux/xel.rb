@@ -15,4 +15,7 @@ Gemfile.lock
 
 .chat.md
 .openai*
+.claude.md
+.klaude.*
+.deepseek*
 
