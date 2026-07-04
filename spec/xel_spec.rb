@@ -33,7 +33,11 @@ XEL_CASES =
       (ll + ']').strip.split("\n").reject { |s| s.match(/^\s*#/) }.join('') }
     .inject([]) { |a, l|
       ss = l.strip.split(/[→⟶]/)
-      a << { c: ss[0], t: eval(ss[1].strip) } if ss.length > 1
+      ss1 = ss[1] && ss[1].strip
+      a << {
+        c: ss[0],
+        t: ss1 && ss1.match?(/^∅/) ? nil : eval(ss1)
+          } if ss.length > 1
       a }
 #pp XEL_CASES; p XEL_CASES.length
 

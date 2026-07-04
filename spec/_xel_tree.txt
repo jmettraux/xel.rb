@@ -1,4 +1,6 @@
 
+12,000,1 ⟶   ∅  # does not parse
+
 987 ⟶   [ "num", "987" ]
 3,000,000 ⟶   [ "num", "3,000,000" ]
 123.45 ⟶   [ "num", "123.45" ]
@@ -133,6 +135,9 @@ LET(_l, LAMBDA(a, b, a + b), _l(2, 3)) ⟶   [
    ["LAMBDA", ["var", "a"], ["var", "b"], ["plus", ["var", "a"], ["var", "b"]]],
    ["_l", ["num", "2"], ["num", "3"]]]
 
+SUM( 2,000 ,3,000,4) ⟶   [
+  "SUM",
+  ["num", "2,000"], ["num", "3,000"], ["num", "4"]]
 
-# vim: syntax=xel_tree
+# vim: syntax=arrowy
 

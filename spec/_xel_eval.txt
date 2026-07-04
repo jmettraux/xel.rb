@@ -266,5 +266,5 @@ D({ 'alpha', 'bravo', 'charly', { 'd', 'ee' } }) ⟶   \
 = CASE(a<5000000, 0.6, a<10000000, 0.55, 0.45) ⟶   { a: 10000 } ⟶    0.6
 CASE(a<5000000, 0.6, a<10000000, 0.55, 0.45) ⟶   { a: 5_100_000 } ⟶   0.55
 
-# vim: syntax=xel_eval
+# vim: syntax=arrowy
 

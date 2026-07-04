@@ -11,8 +11,13 @@ module Xel::Parser include Raabro
   def pz(i); rex(nil, i, /\)\s*/); end
   def com(i); rex(nil, i, /,\s*/); end
 
+  #function number(i) {
+  #  return rex('number', i,
+  #     /-?(\.[0-9]+|([0-9]{1,3}(,[0-9]{3})+|[0-9]+)(\.[0-9]+)?)\s*/); }
   def number(i)
-    rex(:number, i, /-?(\.[0-9]+|([0-9][,0-9]*[0-9]|[0-9]+)(\.[0-9]+)?)\s*/)
+    #rex(:number, i, /-?(\.[0-9]+|([0-9][,0-9]*[0-9]|[0-9]+)(\.[0-9]+)?)\s*/)
+    rex(:number, i,
+      /-?(\.[0-9]+|([0-9]{1,3}(,[0-9]{3})+|[0-9]+)(\.[0-9]+)?)\s*/)
   end
 
   def var(i); rex(:var, i, /[a-z_][A-Za-z0-9_.]*\s*/); end
