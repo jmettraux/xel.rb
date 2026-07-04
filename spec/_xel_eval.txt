@@ -140,8 +140,14 @@ CASE(AND(a > 99, 2 > 1), 2, a > 9, 1, -1) ⟶   { a: 100 } ⟶   2
 CASE(a > 99, 2, a > 9, 1, -1) ⟶   { a: 100} ⟶   2
 CASE(eb, "&", 10, "g", 11, "a", 12, 13) ⟶   { eb: "nada" } ⟶   13
 
+COUNT(a) ⟶   { a: [] } ⟶   0
+COUNT(a) ⟶   { a: ["a", true] } ⟶   0
+COUNT(a) ⟶   { a: [1, "a", 2, 3, false] } ⟶   3
+COUNT(a) ⟶   { a: [1, 2, 3] } ⟶   3
+
 COUNTA(a) ⟶   { a: [] } ⟶   0
 COUNTA(a) ⟶   { a: [1, 2, 3] } ⟶   3
+COUNTA(a) ⟶   { a: ["blue", 1, 2, 3, true] } ⟶   5
 
 HAS(a, "b") ⟶   { a: ["a", "b", "c"] } ⟶   true
 HAS(a, 1) ⟶   { a: [0, 1, 2] } ⟶   true
@@ -185,6 +191,8 @@ NOT(FALSE()) ⟶   true
 OR(1 = 2, 2 = 2) ⟶   true
 OR(TRUE(), FALSE()) ⟶   true
 
+PRODUCT() ⟶   NaN
+PRODUCT(TRUE()) ⟶   NaN
 PRODUCT(2, 3, 4) ⟶   24
 PRODUCT({ 2, 3, 4 }) ⟶   24
 PRODUCT({ 2, 3, 4 }, 2) ⟶   48
@@ -206,6 +214,11 @@ SUM(2, 3, 4) ⟶   9
 SUM({ 2, 3, 4 }) ⟶   9
 SUM({ 2, 3, 4 }, 2) ⟶   11
 SUM({ 2, 3, 4 }, a, 2) ⟶   { a: [0.5, 0.5] } ⟶   12
+
+SUM(2,000, 3, 4) ⟶   2007
+SUM( 2,000 ,3,000,4) ⟶   5004
+AND(2000 < 95,000, TRUE()) ⟶   true
+AND( 2000 < 95,000, TRUE()) ⟶   true
 
 TRUE() ⟶   true
 
