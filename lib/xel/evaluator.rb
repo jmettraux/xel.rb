@@ -213,13 +213,15 @@ module Xel
 
     def eval_PRODUCT(tree, context)
 
-      f = lambda { |r, e|
+      fun = lambda { |r, e|
         case e
         when Numeric then r * e
-        when Array then e.inject(r, &f)
-        else r; end }
+        when Array then e.inject(r, &fun)
+        else Float::NAN; end }
 
-      _eval_args(tree, context).inject(1, &f)
+      facs = _eval_args(tree, context)
+
+      facs.any? ? facs.inject(1, &fun) : Float::NAN
     end
 
     def eval_MIN(tree, context)

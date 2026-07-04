@@ -4,6 +4,7 @@
 
 ## xel.rb 1.6.0  not yet released
 
+* Let PRODUCT() return undefined on zero or non-number factors
 * Implement COUNT()
 * Let D accept D({ k0, v0, k1, v1, ... })
 * Implement `Xel.callbacks` and `ctx._callbacks`
