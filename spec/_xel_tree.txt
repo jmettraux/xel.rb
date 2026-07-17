@@ -139,5 +139,7 @@ SUM( 2,000 ,3,000,4) ⟶   [
   "SUM",
   ["num", "2,000"], ["num", "3,000"], ["num", "4"]]
 
+
+# https://github.com/jmettraux/dotvim/blob/master/syntax/arrowy.vim
 # vim: syntax=arrowy
 
