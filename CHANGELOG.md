@@ -4,6 +4,7 @@
 
 ## xel.rb 1.6.0  not yet released
 
+* Implement DROP() and TAKE()
 * Refine thousand commas parsing, align on xel.js
 * Let PRODUCT() return undefined on zero or non-number factors
 * Implement COUNT()

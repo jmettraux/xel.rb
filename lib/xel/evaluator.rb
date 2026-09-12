@@ -171,6 +171,21 @@ module Xel
       arr.uniq
     end
 
+    def eval_TAKE(tree, context)
+
+      arr, rows, cols = _eval_args(tree, context, max: 3)
+
+      slice =
+        tree[0] == 'DROP' ? lambda { |a, n| n < 0 ? a[0..(n-1)] : a[n..-1] } :
+        lambda { |a, n| n < 0 ? a[n..-1] : a[0, n] }
+
+      r = slice[arr, rows]
+      r = r.collect { |e| slice[e, cols] } if cols
+
+      r
+    end
+    alias eval_DROP eval_TAKE
+
     # SORT({ 1, 3, 2 })         --> [ 1, 2, 3 ]
     # SORT({ 1, 3, 2 }, 1, -1)  --> [ 3, 2, 1 ]
     #

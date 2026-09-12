@@ -225,6 +225,23 @@ TRUE() ⟶   true
 UNIQUE(a) ⟶   { a: [1, 2, 1, 1, 2, 3] } ⟶   [1, 2, 3]
 UNIQUE({ 1, 1 }) ⟶   [1]
 
+TAKE(a, 2) ⟶   { a: [ 1 ] } ⟶   [ 1 ]
+TAKE(a, 2) ⟶   { a: [ 1, 2, 3, 4, 5, 6 ] } ⟶   [ 1, 2 ]
+TAKE(a, -1) ⟶   { a: [ 1, 2, 3, 4, 5, 6 ] } ⟶   [ 6 ]
+TAKE(a, -3) ⟶   { a: [ 1, 2, 3, 4, 5, 6 ] } ⟶   [ 4, 5, 6 ]
+TAKE(a, 2) ⟶   { a: [ [0,1], [2,3], [4,5] ] } ⟶   [ [0,1], [2,3] ]
+TAKE(a, 2, 1) ⟶   { a: [ [0,1], [2,3], [4,5] ] } ⟶   [ [0], [2] ]
+TAKE(a, 2, -1) ⟶   { a: [ [0,1], [2,3], [4,5] ] } ⟶   [ [1], [3] ]
+TAKE("fubarbaz", 2) ⟶   "fu"
+TAKE("fubarbaz", -3) ⟶   "baz"
+
+DROP(a, 3) ⟶   { a: [ 1, 2, 3, 4, 5, 6 ] } ⟶   [ 4, 5, 6 ]
+DROP(a, -3) ⟶   { a: [ 1, 2, 3, 4, 5, 6 ] } ⟶   [ 1, 2, 3 ]
+DROP(a, 1) ⟶   { a: [ [0,1], [2,3], [4,5] ] } ⟶   [ [2,3], [4, 5] ]
+DROP(a, 1, 1) ⟶   { a: [ [0,1], [2,3], [4,5] ] } ⟶   [ [3], [5] ]
+DROP("fubarbaz", 3) ⟶   "arbaz"
+DROP("fubarbaz", -3) ⟶   "fubar"
+
 UPPER("alpha bravo charly") ⟶   "ALPHA BRAVO CHARLY"
 LOWER("ALPHA BRAVO Charly") ⟶   "alpha bravo charly"
 
