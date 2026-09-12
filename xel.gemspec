@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.name = 'xel'
 
   s.version = File.read(
-    File.expand_path('../lib/xel.rb', __FILE__)
+    File.expand_path("../lib/#{s.name}.rb", __FILE__)
   ).match(/ VERSION *= *['"]([^'"]+)/)[1]
 
   s.platform = Gem::Platform::RUBY
@@ -39,7 +39,8 @@ Xel interprets the expressions usually found in a spreadsheet cell, hence its di
 
   s.add_runtime_dependency 'raabro', '~> 1.4'
 
-  s.add_development_dependency 'rspec', '~> 3.8'
+  #s.add_development_dependency 'rspec', '~> 3.8'
+  s.add_runtime_dependency 'probatio', '~> 1.4'
 
   s.require_path = 'lib'
 end
